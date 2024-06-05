@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import YouTube, { YouTubeEvent } from 'react-youtube';
+import { List, ListItemButton, ListItemText, Grid, Stack  } from '@mui/material';
 import { Video, YouTubePlayer } from './common';
 import Submit from './submit';
 import { getVideo, getVideosFromPlaylist } from './gapi';
@@ -12,7 +13,28 @@ interface Props {
     setFirst: any
 }
 
-export default function VideoQueue(props) {
+function QueueList({ head, rest, handleClick }) {
+    const QueueItem = (i: number, value: Video) => (
+        <ListItemButton
+            key={i}
+            selected={i===0}
+            onClick={(_) => handleClick(i)}>
+                <ListItemText primary={value?.title} secondary={value?.channel} />
+        </ListItemButton>
+    )
+
+    return(
+        <div>
+            <b>QUEUE</b>
+            <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                {QueueItem(0, head)}
+                {rest.map((x, i) => (QueueItem(i+1, x)))}
+            </List>
+        </div>
+    )
+}
+
+export default function QueueComponent(props) {
     const { initialized, playerRef, stateEvent, first, setFirst } = props;
     const [videos, setVideos] = useState<Video[]>([]);
     const [playing, setPlaying] = useState<Video>();
@@ -50,13 +72,14 @@ export default function VideoQueue(props) {
         setLoading(false);
     };
 
-    const pop = () => {
-        if (videos.length == 0) {
+    const pop = (i = 0) => {
+        setLoading(true);
+        if (videos.length === 0) {
             setPlaying(undefined);
             return;
         }
-        setPlaying(videos[0]);
-        setVideos([...videos.slice(1)]);
+        setPlaying(videos[i]);
+        setVideos([...videos.slice(i+1)]);
         setLoading(false);
         console.log("pop!");
     }
@@ -83,18 +106,17 @@ export default function VideoQueue(props) {
     };
 
     const handleStateChange = (event: YouTubeEvent) => {
-        switch (event.data) {
-            case YouTube.PlayerState.ENDED:
-                pop();
-                break;
-
-            default:
-                break;
+        if (event.data == YouTube.PlayerState.ENDED) {
+            pop();
         }
     }
 
+    const handleClick = (i) => {
+        pop(i);
+    }
+
     return(
-        <div>
+        <Stack spacing={2}>
             <Submit 
                 label={"Queue playlist:"} 
                 initialValue={'PLSGEqKTEpB0FDOYLNSJeKrEZeIT_iehIh'} 
@@ -103,8 +125,9 @@ export default function VideoQueue(props) {
                 label={"Queue video:"} 
                 initialValue={'klBnLJSKHBA'} 
                 handleSubmit={(v) => push(v)} />
+            { playing && <QueueList head={playing} rest={videos} handleClick={handleClick} /> }
             { loading && !initialized && <b>loading...</b> }
             { loading && initialized && <b>loading... will play after this video</b> }
-        </div>
+        </Stack>
     );
 }

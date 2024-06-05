@@ -2,8 +2,9 @@
 
 import { useRef, useState } from 'react';
 import { Video, YouTubePlayer } from '../src/common';
-import VideoQueue from "../src/queue";
+import QueueComponent from "../src/queue";
 import Player from "../src/player";
+import { Stack } from '@mui/material';
 
 function PlayerComponent() {
     const playerRef = useRef<null | YouTubePlayer>(null);
@@ -20,8 +21,8 @@ function PlayerComponent() {
     };
 
     return (
-        <div>
-            <VideoQueue 
+        <Stack spacing={3} direction="row">
+            <QueueComponent 
                 initialized={initialized}
                 stateEvent={endEvent}
                 playerRef={playerRef}
@@ -31,12 +32,16 @@ function PlayerComponent() {
                     video={first}
                     setPlayerRef={setPlayerRef} 
                     setEndEvent={setEndEvent} />}
-        </div>
+        </Stack>
     );
 }
 
 export default function Page() {
     return (
+        <div style={{margin: "50px"}}>
+            <h1>{"random dance play <3"}</h1>
+            <br></br>
             <PlayerComponent />
+        </div>
     );
 }

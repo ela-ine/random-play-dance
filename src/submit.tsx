@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FormGroup, TextField, Button } from '@mui/material';
 
 export default function Submit({ label, initialValue, handleSubmit }) {
     const [val, setVal] = useState(initialValue || '');
@@ -17,10 +18,15 @@ export default function Submit({ label, initialValue, handleSubmit }) {
     };
     
     return (
-        <form onSubmit={onSubmit}>
-                <label>{label}</label>
-                <input type="text" value={val} onChange={handleInputChange} />
-                <button type="submit">Submit</button>
-        </form>
+        // <div>
+            <form onSubmit={onSubmit}>
+                <FormGroup>
+                    <TextField defaultValue={val} onChange={handleInputChange} label={label} size='small' margin='normal'></TextField>
+                    <Button type="submit" variant="outlined">Submit</Button>
+                </FormGroup>
+                    {/* <label>{label}</label>
+                    <input type="text" value={val} onChange={handleInputChange} /> */}
+            </form>
+        // </div>
     );
 }
