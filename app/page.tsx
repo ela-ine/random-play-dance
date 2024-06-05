@@ -1,11 +1,11 @@
 'use client'
 
 import { useRef, useState } from 'react';
-import { Video, YouTubePlayer } from './common';
-import VideoQueue from "./queue";
-import Player from "./player";
+import { Video, YouTubePlayer } from '../src/common';
+import VideoQueue from "../src/queue";
+import Player from "../src/player";
 
-export function PlayerComponent() {
+function PlayerComponent() {
     const playerRef = useRef<null | YouTubePlayer>(null);
     const [endEvent, setEndEvent] = useState();
     const [initialized, setInitialized] = useState(false);
@@ -25,6 +25,7 @@ export function PlayerComponent() {
                 initialized={initialized}
                 stateEvent={endEvent}
                 playerRef={playerRef}
+                first={first}
                 setFirst={setFirst} />
                 {first && <Player 
                     video={first}
@@ -34,7 +35,7 @@ export function PlayerComponent() {
     );
 }
 
-export default function Home() {
+export default function Page() {
     return (
             <PlayerComponent />
     );

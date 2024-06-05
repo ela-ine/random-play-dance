@@ -13,8 +13,8 @@ interface Props {
 }
 
 export default function VideoQueue(props) {
-    const { initialized, playerRef, stateEvent, setFirst } = props;
-    const [videos, setVideos] = useState([]);
+    const { initialized, playerRef, stateEvent, first, setFirst } = props;
+    const [videos, setVideos] = useState<Video[]>([]);
     const [playing, setPlaying] = useState<Video>();
     const [loading, setLoading] = useState(false);
     const start = 0;
@@ -52,7 +52,7 @@ export default function VideoQueue(props) {
 
     const pop = () => {
         if (videos.length == 0) {
-            setPlaying(null);
+            setPlaying(undefined);
             return;
         }
         setPlaying(videos[0]);
@@ -64,11 +64,15 @@ export default function VideoQueue(props) {
     const push = async (x) => {
         setLoading(true);
         const v = await getVideo(x);
-        if (playerRef.current.getPlayerState()) {
+        if (playing) {
             setVideos([v, ...videos]);
         } else {
             console.log("queueing video...", v, playing);
             setPlaying(v);
+        }
+        
+        if (!first) {
+            setFirst(v);
         }
         setLoading(false);
     }

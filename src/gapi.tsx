@@ -12,19 +12,19 @@ export async function getVideosFromPlaylist(playlist) {
     console.log("getting videos...")
     var videos: Video[] = [];
 
-    var nextPageToken = '';
-    while (nextPageToken != null) {
+    var nextPageToken: string | null | undefined = '';
+    while (nextPageToken != null || nextPageToken != undefined) {
         const response = await youtube.playlistItems.list({
             part: ['snippet'],
             playlistId: playlist,
             maxResults: 50
         });
         
-        response.data.items.map((video) => {
+        response.data.items?.map((video) => {
             const v: Video = {
-                id: video.snippet.resourceId.videoId,
-                title: video.snippet.title,
-                channel: video.snippet.videoOwnerChannelTitle,
+                id: video.snippet?.resourceId?.videoId || '',
+                title: video.snippet?.title || '',
+                channel: video.snippet?.videoOwnerChannelTitle || '',
             };
 
             videos.push(v);
@@ -38,20 +38,23 @@ export async function getVideosFromPlaylist(playlist) {
 
 // gets video by id
 export async function getVideo(id: string) {
+    var v: Video = {}
     const response = await youtube.videos.list({
         part: ['snippet'],
         id: [id],
         maxResults: 1
     })
+    const items = response.data.items;
 
-    if (response.data.items.length > 0) {
-        const snippet = response.data.items[0].snippet;
-        const v: Video = {
+    if (items && items[0].snippet) {
+        const snippet = items[0].snippet;
+        v = {
             id: id,
-            title: snippet.title,
-            channel: snippet.channelTitle,
+            title: snippet.title || '',
+            channel: snippet.channelTitle || '',
         };
-        return v;
     }
+    
+    return v;
 }
     

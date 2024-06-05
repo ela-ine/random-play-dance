@@ -1,10 +1,29 @@
-# random dance play app !
+# random play dance <3
+we're just tryna dance... randomly....
 
-## what is it?
+## features
+- queue playlist
+- queue video
+- play a snippet from queued videos
 
-## stretch goals
+## in progress...
+- set custom timestamps for snippets
+
+## wishlist
+- save & share playlists
+- collaborative sessions
+- ai integration
+    - prompt for playlist creation (e.g. genre/generation)
+    - timestamp suggestions (e.g. chorus, dance break, etc.)
+- ui for adjusting timestamp within video player
+- lyrics integration? for timestamps
 
 ## architecture
-
-### testing notes
-playlist id: `PLSGEqKTEpB0FDOYLNSJeKrEZeIT_iehIh`
+```│
+player component:
+├── video player
+└── video queue
+    ├── currently playing video
+    ├── queued videos
+    └── submit functions for playlist/video queuing
+```
