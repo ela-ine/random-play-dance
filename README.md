@@ -9,7 +9,7 @@ we're just tryna dance... randomly....
 - play a snippet from queued videos
 
 ## in progress...
-- display queue
+- delete from queue
 - set custom timestamps for snippets
 
 ## wishlist
@@ -22,16 +22,18 @@ we're just tryna dance... randomly....
 - lyrics integration? for timestamps
 
 ## bugs
-- queue
+- queue: generally inconsistent behavior
     - player requires a timeout in order to call queue without null ref
-    - calling queue video then playlist will result in null ref
+    - calling queue video then playlist -> null ref
+    - queueing video while playlist is playing -> null ref
+- responsive design for video player
 
 ## architecture
 ```│
 player component:
-├── video player
 └── video queue
     ├── currently playing video
     ├── queued videos
+    ├── video player
     └── submit functions for playlist/video queuing
 ```

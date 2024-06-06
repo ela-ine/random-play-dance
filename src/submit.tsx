@@ -19,13 +19,11 @@ export default function Submit({ label, initialValue, handleSubmit }) {
     
     return (
         // <div>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} style={{width: '100%'}}>
                 <FormGroup>
                     <TextField defaultValue={val} onChange={handleInputChange} label={label} size='small' margin='normal'></TextField>
                     <Button type="submit" variant="outlined">Submit</Button>
                 </FormGroup>
-                    {/* <label>{label}</label>
-                    <input type="text" value={val} onChange={handleInputChange} /> */}
             </form>
         // </div>
     );

@@ -7,8 +7,15 @@ const youtube = google.youtube({
     auth: process.env.GAPI_KEY,
 });
 
+const offline = process.env.ENV == 'OFFLINE';
+const dummy: Video = { id: 'test', title: 'title', channel: 'channel' }
+
 // gets videos by playlist id
 export async function getVideosFromPlaylist(playlist) {
+    if (offline) {
+        return [dummy, dummy, dummy]
+    }
+
     console.log("getting videos...")
     var videos: Video[] = [];
 
@@ -38,6 +45,10 @@ export async function getVideosFromPlaylist(playlist) {
 
 // gets video by id
 export async function getVideo(id: string) {
+    if (offline) {
+        return dummy;
+    }
+
     var v: Video = {}
     const response = await youtube.videos.list({
         part: ['snippet'],

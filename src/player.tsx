@@ -1,16 +1,19 @@
 "use client"
 import { MutableRefObject, createContext, memo, useContext, useEffect, useRef, useState } from "react";
 import YouTube, { YouTubeEvent } from "react-youtube";
-import { YouTubePlayer } from 'youtube-player/dist/types';
 import { Video } from './common';
 
-const Player = memo(function Player(props: { video: Video, setPlayerRef, setEndEvent }) {
+const Player = memo(function Player(props: { video: Video | undefined, playerRef, setPlayerRef, setEndEvent }) {
     const { video , setPlayerRef, setEndEvent } = props;
     const start = 0;
     const end = 5;
+    const viewportWidth = Math.max(document?.documentElement.clientWidth || 0, window.innerWidth || 0)
+    // TODO: replace width condition to reflect xs
+    const width = viewportWidth > 750 ? Math.floor(viewportWidth * 0.7) : viewportWidth-16;
+    const height = Math.floor(width * 9/16);
     const options = {
-        width: "1280",
-        height: "720",
+        width: width.toString(),
+        height: height.toString(),
         playerVars: {
             start: start,
             end: end,
@@ -20,6 +23,7 @@ const Player = memo(function Player(props: { video: Video, setPlayerRef, setEndE
     const onReady = async (event: YouTubeEvent) => {
         await setTimeout(() => {
             console.log("player ready!", event.target.videoTitle);
+            event.target.mute();
             event.target.playVideo();
             setPlayerRef(event.target);
         }, 1);
@@ -36,13 +40,18 @@ const Player = memo(function Player(props: { video: Video, setPlayerRef, setEndE
     }
 
     return(
-        <YouTube
-            videoId={video.id}
-            opts={options}
-            onReady={onReady}
-            onStateChange={onStateChange}
-            onEnd={onEnd}
-        />
+        <div style={{paddingTop: '16px'}}>
+            {video && (
+                process.env.ENV != 'OFFLINE' ?
+                (<YouTube
+                videoId={video.id}
+                opts={options}
+                onReady={onReady}
+                onStateChange={onStateChange}
+                onEnd={onEnd} />) : (
+                <div style={{height: height, width: width, backgroundColor: 'black'}}></div>))
+            }
+        </div>
     );
 })
 
