@@ -45,7 +45,6 @@ export default function QueueComponent(props: Props) {
     const [playing, setPlaying] = useState<Video>();
     const [loading, setLoading] = useState(false);
     const isMediumScreen = useMediaQuery((theme: Theme) => theme?.breakpoints.down('lg'));
-    const isSmallScreen = useMediaQuery((theme: Theme) => theme?.breakpoints.down('sm'));
     const start = 0;
     const end = 5;
 
@@ -147,7 +146,7 @@ export default function QueueComponent(props: Props) {
 
     return(
         <div style={{margin: 'auto'}}>
-            {isSmallScreen ? (
+            {isMediumScreen ? (
                 <div>
                     {children}
                     <Stack style={{padding: '15px 30px'}}>
@@ -155,12 +154,6 @@ export default function QueueComponent(props: Props) {
                         {queueListComponent()}
                     </Stack>
                 </div>
-            ) : (isMediumScreen ? (
-            <Stack>
-                {queueSubmitComponent()}
-                {children}
-                {queueListComponent()}
-            </Stack>
             ) : (
             <Stack spacing={5} direction="row">
                 <Stack spacing={2} style={{width: '300px'}}>
@@ -168,7 +161,7 @@ export default function QueueComponent(props: Props) {
                     {queueListComponent()}
                 </Stack>
                 {children}
-            </Stack>))}
+            </Stack>)}
         </div>
     );
 }

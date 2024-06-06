@@ -3,6 +3,8 @@ import { MutableRefObject, createContext, memo, useContext, useEffect, useRef, u
 import YouTube, { YouTubeEvent } from "react-youtube";
 import { Video } from './common';
 
+const offline = process.env.ENV === 'OFFLINE'
+
 const Player = memo(function Player(props: { video: Video | undefined, playerRef, setPlayerRef, setEndEvent }) {
     const { video , setPlayerRef, setEndEvent } = props;
     const start = 0;
@@ -23,7 +25,9 @@ const Player = memo(function Player(props: { video: Video | undefined, playerRef
     const onReady = async (event: YouTubeEvent) => {
         await setTimeout(() => {
             console.log("player ready!", event.target.videoTitle);
-            event.target.mute();
+            if (offline) {
+                event.target.mute();
+            }
             event.target.playVideo();
             setPlayerRef(event.target);
         }, 1);
@@ -42,7 +46,7 @@ const Player = memo(function Player(props: { video: Video | undefined, playerRef
     return(
         <div style={{paddingTop: '16px'}}>
             {video && (
-                process.env.ENV != 'OFFLINE' ?
+                !offline ?
                 (<YouTube
                 videoId={video.id}
                 opts={options}
