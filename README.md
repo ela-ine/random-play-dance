@@ -11,6 +11,7 @@ we're just tryna dance... randomly....
 ## in progress...
 - delete from queue
 - set custom timestamps for snippets
+- countdown
 
 ## wishlist
 - save & share playlists
@@ -26,14 +27,33 @@ we're just tryna dance... randomly....
     - player requires a timeout in order to call queue without null ref
     - calling queue video then playlist -> null ref
     - queueing video while playlist is playing -> null ref
-- responsive design for video player
+- responsive design for video player - resizing does NOT work
 
 ## architecture
 ```│
-player component:
-└── video queue
-    ├── currently playing video
-    ├── queued videos
-    ├── video player
-    └── submit functions for playlist/video queuing
+queue component
+├── queue data
+├── queue operations
+└── queue list (display)
+
+form component
+└── form field(s)
+    └── form validations
+
+timestamp form : form fields
+
+playlist form
+└── timestamp form
+
+queue form
+├── form field
+└── timestamp form
+
+player component
+└── queue component
+    ├── player component
+    ├── playlist queue form
+    │   └── playlist timestamp form
+    └── video queue form
+        └── timestamp form
 ```

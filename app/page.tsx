@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef, useState } from 'react';
-import { Video, YouTubePlayer } from '../src/common';
-import QueueComponent from "../src/queue";
-import Player from "../src/player";
+import { Video, YouTubePlayer } from '../src/components/common';
+import Queue from "../src/components/queue/queue";
+import Player from "../src/components/player";
 import { Stack, Theme, ThemeProvider, createTheme, useMediaQuery } from '@mui/material';
 
 function PlayerComponent() {
@@ -14,7 +14,6 @@ function PlayerComponent() {
     const [first, setFirst] = useState<Video>();
     const setPlayerRef = (r: YouTubePlayer) => {
         if (!initialized) {
-            console.log("initialized");
             playerRef.current = r;
             setInitialized(true);
         }
@@ -22,9 +21,9 @@ function PlayerComponent() {
 
     return (
         <Stack spacing={3} direction={{ md: "column", lg: "row"}}>
-            <QueueComponent 
+            <Queue 
                 initialized={initialized}
-                stateEvent={endEvent}
+                endEvent={endEvent}
                 playerRef={playerRef}
                 first={first}
                 setFirst={setFirst}>
@@ -33,7 +32,7 @@ function PlayerComponent() {
                         playerRef={playerRef}
                         setPlayerRef={setPlayerRef} 
                         setEndEvent={setEndEvent} />
-                </QueueComponent>
+                </Queue>
         </Stack>
     );
 }
@@ -42,7 +41,7 @@ export default function Page() {
     const theme = createTheme();
     return (
         <ThemeProvider theme={theme}>
-            <h1 style={{textAlign: 'center', padding: '5px 20 px'}}>{"random play dance <3"}</h1>
+            <h1 style={{textAlign: 'center', padding: '20px 20px 0px 20px'}}>{"random play dance <3"}</h1>
             <PlayerComponent />
         </ThemeProvider>
     );
